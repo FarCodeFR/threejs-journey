@@ -2,12 +2,28 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import gsap from "gsap";
 import GUI from "lil-gui";
+import { Wireframe } from "three/examples/jsm/Addons.js";
 
 /**
  * Debug
  */
 
-const gui = new GUI();
+const gui = new GUI({
+  width: 300,
+  title: "Debug UI",
+  closeFolders: true,
+});
+// gui.close();
+
+// gui.hide();
+
+window.addEventListener("keydown", (event) => {
+  if (event.key == "h") {
+    gui.show(gui._hidden);
+  }
+});
+
+const debugObject = {};
 
 /**
  * Base
@@ -21,13 +37,71 @@ const scene = new THREE.Scene();
 /**
  * Object
  */
+debugObject.color = "#3a6ea6";
+
 const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
-const material = new THREE.MeshBasicMaterial({ color: "#ff0000" });
+const material = new THREE.MeshBasicMaterial({ wireframe: true });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
-gui.add(mesh.position, "y").min(-3).max(3).step(0.01).name("elevation");
+// Pour créer des dossiers
+const cubeTweaks = gui.addFolder("Awesome cube");
 
+cubeTweaks.add(mesh.position, "y").min(-3).max(3).step(0.01).name("elevation");
+
+cubeTweaks.add(mesh, "visible");
+
+cubeTweaks.add(material, "wireframe");
+
+cubeTweaks.addColor(debugObject, "color").onChange((value) => {
+  material.color.set(debugObject.color);
+});
+
+// debugObject.twoSpin = () => {
+//   gsap.to(mesh.rotation, {
+//     y: 360,
+//     x: 360,
+//     duration: 5,
+//     ease: "sine.in",
+//   });
+// };
+
+debugObject.spin = () => {
+  gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2 });
+};
+
+debugObject.spinVertical = () => {
+  gsap.to(mesh.rotation, { x: mesh.rotation.x + Math.PI * 2 });
+};
+
+debugObject.twoSpin = () => {
+  gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2 });
+  gsap.to(mesh.rotation, { x: mesh.rotation.x + Math.PI * 2 });
+};
+
+cubeTweaks.add(debugObject, "spin");
+cubeTweaks.add(debugObject, "spinVertical");
+cubeTweaks.add(debugObject, "twoSpin");
+
+debugObject.subdivision = 2;
+
+cubeTweaks
+  .add(debugObject, "subdivision")
+  .min(1)
+  .max(20)
+  .step(1)
+  .onFinishChange(() => {
+    // Dispose pour supprimer tout les anciennes geometry de la vram GPU ( meilleure performance )
+    mesh.geometry.dispose();
+    mesh.geometry = new THREE.BoxGeometry(
+      1,
+      1,
+      1,
+      debugObject.subdivision,
+      debugObject.subdivision,
+      debugObject.subdivision,
+    );
+  });
 /**
  * Sizes
  */
