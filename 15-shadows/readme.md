@@ -14,3 +14,4 @@ npm run dev
 # Build for production in the dist/ directory
 npm run build
 ```
+<img width="480" height="272" alt="gif (2)" src="https://github.com/user-attachments/assets/7b8282f1-cedc-4f3e-a1d1-1b5a6bf63600" />
