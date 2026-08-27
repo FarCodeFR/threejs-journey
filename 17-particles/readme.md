@@ -15,4 +15,7 @@ npm run dev
 # Build for production in the dist/ directory
 npm run build
 ```
+
 <img width="632" height="450" alt="giphy (1)" src="https://github.com/user-attachments/assets/dc4f62ce-06dd-4c13-ac41-25a1dded531a" />
+
+https://17-particles-rho.vercel.app/
