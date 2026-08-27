@@ -29,7 +29,7 @@ const particleTexture = textureLoader.load("./textures/particles/star_04.png");
 
 // Geometry
 const particlesGeometry = new THREE.BufferGeometry();
-const particlesCount = 50000;
+const particlesCount = 100000;
 
 const positions = new Float32Array(particlesCount * 3);
 const colors = new Float32Array(particlesCount * 3);
